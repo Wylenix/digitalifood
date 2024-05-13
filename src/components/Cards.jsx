@@ -49,9 +49,6 @@ export default function Cards({ card }) {
             >
               <BookOpenText size={16} />
             </Link>
-            <Button variant="secondary">
-              <PlusCircle size={16} />
-            </Button>
           </div>
         </>
       )}

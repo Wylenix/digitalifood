@@ -15,7 +15,25 @@ export default function Products({ searchParams }) {
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState([]);
   const [currentFilter, setCurrentFilter] = useState(null);
-  const [selectedRecipe, setSelectedRecipe] = useState(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value.toLowerCase()); // Convert search terms to lowercase for case-insensitive search
+  };
+
+  const filteredRecipes = currentFilter
+    ? recipes.filter((recipe) => {
+        const searchText = recipe.recipe.label.toLowerCase(); // Convert recipe label to lowercase for case-insensitive search
+        return (
+          searchText.includes(searchQuery) &&
+          recipe.recipe.cuisineType.includes(currentFilter)
+        );
+      })
+    : recipes.filter((recipe) => {
+        const searchText = recipe.recipe.label.toLowerCase();
+        return searchText.includes(searchQuery);
+      });
 
   useEffect(() => {
     const headers = {
@@ -54,16 +72,18 @@ export default function Products({ searchParams }) {
     }
   };
 
-  const filteredRecipes = currentFilter
-    ? recipes.filter((recipe) =>
-        recipe.recipe.cuisineType.includes(currentFilter)
-      )
-    : recipes;
-
   return (
     <main className="m-auto flex h-full max-w-4xl flex-col px-4">
       <Header />
-      <div className="mb-4 mt-8 px-2 py-1 flex flex-1 gap-4 overflow-auto max-lg:flex-col">
+      <input
+        type="text"
+        placeholder="Rechercher une recette"
+        className="mt-8 rounded-md px-2 py-1 border border-gray-300 focus:outline-none focus:border-gray-500"
+        value={searchQuery}
+        onChange={handleSearchChange}
+      />
+
+      <div className="mb-4 mt-4 px-2 py-1 flex flex-1 gap-4 overflow-auto max-lg:flex-col">
         {isLoading ? (
           <div className="grid grid-cols-4 overflow-auto gap-4 w-full md:grid-cols-4 lg:grid-col-6 h-fit">
             <Skeleton
@@ -98,6 +118,7 @@ export default function Products({ searchParams }) {
               currentFilter={currentFilter}
               onFilterChange={handleFilterChange}
             />
+
             <div className="grid grid-cols-1 overflow-auto gap-4 w-full md:grid-cols-2 lg:grid-col-3 h-fit">
               {filteredRecipes.map((card, index) => (
                 <Cards
