@@ -78,7 +78,7 @@ export default function Products({ searchParams }) {
       <input
         type="text"
         placeholder="Rechercher une recette"
-        className="mt-8 rounded-md px-2 py-1 border border-gray-300 focus:outline-none focus:border-gray-500"
+        className="mt-8 rounded-md px-2 py-1 shadow-md border border-none focus:outline focus:border-sky-400"
         value={searchQuery}
         onChange={handleSearchChange}
       />

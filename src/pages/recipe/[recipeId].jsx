@@ -17,7 +17,7 @@ const RecipeDetail = () => {
     <main className="m-auto flex h-full max-w-4xl flex-col px-4">
       <Header />
       <div className="mb-4 mt-8 px-2 py-1 flex flex-1 gap-4 overflow-auto max-lg:flex-col"></div>
-      <Link href="/" className="flex rounded-md hover:bg-gray-200 pt-2 pl-2">
+      <Link href="/" className="flex rounded-md hover:bg-sky-200 pt-2 pl-2">
         <CircleArrowLeft size={22} />
         <span className="pl-2 pb-2">Back</span>
       </Link>

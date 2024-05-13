@@ -5,9 +5,9 @@ export const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gray-950 text-gray-50 shadow hover:bg-gray-800",
-        ghost: "bg-transparent text-gray-950 hover:bg-gray-200",
-        secondary: "bg-gray-200 text-gray-950 hover:bg-gray-300",
+        default: "bg-sky-950 text-sky-50 shadow hover:bg-sky-800",
+        ghost: "bg-transparent text-sky-950 hover:bg-sky-200",
+        secondary: "bg-sky-200 text-sky-950 hover:bg-sky-300",
       },
     },
     defaultVariants: {

@@ -12,7 +12,7 @@ export default function Cards({ card }) {
     const cautions = card.recipe.cautions;
     const diet = card.recipe.dietLabels;
     const ingredient = card.recipe.ingredientLines;
-    console.log(card.recipe);
+
     router.push(
       `/recipe/${card.recipe.label}?type=${type}&ingredient=${ingredient}&calories=${calories}&cautions=${cautions}&diet=${diet}}`
     );
@@ -20,7 +20,7 @@ export default function Cards({ card }) {
   return (
     <div
       onClick={handleCardClick}
-      className="flex flex-col items-center justify-center gap-4 rounded-lg border p-4 shadow transition-colors hover:border-gray-300 hover:bg-gray-100"
+      className="flex flex-col items-center justify-center gap-4 rounded-lg border p-4 shadow transition-colors hover:border-sky-300 hover:bg-sky-100"
     >
       {/* On vérifie si card.recipe est défini avant d'accéder à ses propriétés */}
       {card.recipe && (
@@ -37,7 +37,7 @@ export default function Cards({ card }) {
             fetchpriority="high"
           />
           <div className="flex w-full items-center gap-2">
-            <p className="line-clamp-1 text-start text-xs text-gray-400">
+            <p className="line-clamp-1 text-start text-xs text-sky-900">
               {card.recipe.cuisineType}
             </p>
             <Link
