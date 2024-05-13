@@ -22,7 +22,7 @@ function LoginPage() {
       <h1>Login</h1>
       <p>Please sign in to continue</p>
 
-      <a href="/api/auth/signin/github">Sign in with GitHub</a>
+      <a href="/login/api/auth/signin/github">Sign in with GitHub</a>
     </div>
   );
 }
