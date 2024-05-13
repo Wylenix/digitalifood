@@ -14,7 +14,10 @@ export default function Header() {
       </h1>
       <div className="flex gap-2 ml-auto">
         <Button variant="ghost">
-          <User size={24} />
+          <Link href="/login">
+            {" "}
+            <User size={24} />
+          </Link>
         </Button>
       </div>
     </header>
