@@ -2,7 +2,7 @@ import Skeleton from "@mui/material/Skeleton";
 export default function Skeletons() {
   return (
     <>
-      <Skeleton animation="wave" variant="text" sx={{ fontSize: "1rem" }} />
+      <Skeleton variant="text" sx={{ fontSize: "1rem" }} />
 
       <Skeleton
         animation="wave"
