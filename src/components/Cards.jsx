@@ -12,7 +12,7 @@ export default function Cards({ card }) {
     const cautions = card.recipe.cautions;
     const diet = card.recipe.dietLabels;
     const ingredient = card.recipe.ingredientLines;
-
+    
     router.push(
       `/recipe/${card.recipe.label}?type=${type}&ingredient=${ingredient}&calories=${calories}&cautions=${cautions}&diet=${diet}}`
     );

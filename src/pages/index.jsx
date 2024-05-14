@@ -4,8 +4,10 @@ import Header from "../components/Header";
 import Menu from "../components/Menu";
 import Cards from "../components/Cards";
 import axios from "axios";
+import { useUser } from "@auth0/nextjs-auth0/client";
+import Logout from "../components/Logout";
 
-import Skeleton from "@mui/material/Skeleton";
+import Skeletons from "../components/Skeletons";
 
 const APP_ID = "7248fed2";
 const APP_KEY = "7d091d263de5ba4f3bce3eb74fa719f0";
@@ -15,6 +17,10 @@ export default function Products({ searchParams }) {
   const [isLoading, setIsLoading] = useState(true);
   const [filters, setFilters] = useState([]);
   const [currentFilter, setCurrentFilter] = useState(null);
+  const { user, error, isLoadingApp } = useUser();
+
+  if (isLoadingApp) return <div>Loading...</div>;
+  if (error) return <div>{error.message}</div>;
 
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -49,7 +55,7 @@ export default function Products({ searchParams }) {
     axios(options)
       .then((response) => {
         const recipeData = response.data.hits;
-
+        console.log(response.data);
         setRecipes(recipeData);
         setIsLoading(false);
         const allCategories = recipeData.flatMap(
@@ -71,66 +77,45 @@ export default function Products({ searchParams }) {
       setCurrentFilter(filter);
     }
   };
+  if (user) {
+    return (
+      <main className="m-auto flex h-full max-w-4xl flex-col px-4">
+        <Header />
+        <input
+          type="text"
+          placeholder="Rechercher une recette"
+          className="mt-8 rounded-md px-2 py-1 shadow-md border border-none focus:outline focus:border-sky-400"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
 
-  return (
-    <main className="m-auto flex h-full max-w-4xl flex-col px-4">
-      <Header />
-      <input
-        type="text"
-        placeholder="Rechercher une recette"
-        className="mt-8 rounded-md px-2 py-1 shadow-md border border-none focus:outline focus:border-sky-400"
-        value={searchQuery}
-        onChange={handleSearchChange}
-      />
-
-      <div className="mb-4 mt-4 px-2 py-1 flex flex-1 gap-4 overflow-auto max-lg:flex-col">
-        {isLoading ? (
-          <div className="grid grid-cols-4 overflow-auto gap-4 w-full md:grid-cols-4 lg:grid-col-6 h-fit">
-            <Skeleton
-              animation="wave"
-              variant="text"
-              sx={{ fontSize: "1rem" }}
-            />
-
-            <Skeleton
-              animation="wave"
-              variant="rectangular"
-              width={210}
-              height={60}
-            />
-            <Skeleton
-              animation="wave"
-              variant="rounded"
-              width={210}
-              height={60}
-            />
-            <Skeleton
-              animation="wave"
-              variant="rectangular"
-              width={210}
-              height={60}
-            />
-          </div>
-        ) : (
-          <>
-            <Menu
-              filters={filters}
-              currentFilter={currentFilter}
-              onFilterChange={handleFilterChange}
-            />
-
-            <div className="grid grid-cols-1 overflow-auto gap-4 w-full md:grid-cols-2 lg:grid-col-3 h-fit">
-              {filteredRecipes.map((card, index) => (
-                <Cards
-                  card={card}
-                  key={card.recipe.label}
-                  onClick={() => handleCardClick(card)}
-                />
-              ))}
+        <div className="mb-4 mt-4 px-2 py-1 flex flex-1 gap-4 overflow-auto max-lg:flex-col">
+          {isLoading ? (
+            <div className="grid grid-cols-4 overflow-auto gap-4 w-full md:grid-cols-4 lg:grid-col-6 h-fit">
+              <Skeletons />
             </div>
-          </>
-        )}
-      </div>
-    </main>
-  );
+          ) : (
+            <>
+              <Menu
+                filters={filters}
+                currentFilter={currentFilter}
+                onFilterChange={handleFilterChange}
+              />
+
+              <div className="grid grid-cols-1 overflow-auto gap-4 w-full md:grid-cols-2 lg:grid-col-3 h-fit">
+                {filteredRecipes.map((card, index) => (
+                  <Cards
+                    card={card}
+                    key={card.recipe.label}
+                    onClick={() => handleCardClick(card)}
+                  />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+      </main>
+    );
+  }
+  return <Logout />;
 }
