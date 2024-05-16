@@ -3,6 +3,7 @@ import Image from "next/image";
 import { BookOpenText, PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
 export default function Cards({ card }) {
   const router = useRouter();
 
@@ -12,16 +13,13 @@ export default function Cards({ card }) {
     const cautions = card.recipe.cautions;
     const diet = card.recipe.dietLabels;
     const ingredient = card.recipe.ingredientLines;
-    
+
     router.push(
       `/recipe/${card.recipe.label}?type=${type}&ingredient=${ingredient}&calories=${calories}&cautions=${cautions}&diet=${diet}}`
     );
   };
   return (
-    <div
-      onClick={handleCardClick}
-      className="flex flex-col items-center justify-center gap-4 rounded-lg border p-4 shadow transition-colors hover:border-sky-300 hover:bg-sky-100"
-    >
+    <div className="flex flex-col items-center justify-center gap-4 rounded-lg border p-4 shadow transition-colors hover:border-sky-300 hover:bg-sky-100">
       {/* On vérifie si card.recipe est défini avant d'accéder à ses propriétés */}
       {card.recipe && (
         <>
@@ -36,7 +34,10 @@ export default function Cards({ card }) {
             priority="high"
             fetchpriority="high"
           />
-          <div className="flex w-full items-center gap-2">
+          <div
+            onClick={handleCardClick}
+            className="flex w-full items-center gap-2"
+          >
             <p className="line-clamp-1 text-start text-xs text-sky-900">
               {card.recipe.cuisineType}
             </p>

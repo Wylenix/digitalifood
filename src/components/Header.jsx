@@ -7,7 +7,7 @@ import Image from "next/image";
 import digitalichef from "../../public/digitalichef.jpg";
 export default function Header() {
   const { user } = useUser();
-  console.log(user);
+
   return (
     <header className="flex w-full items-center py-4">
       <h1 className="inline-flex items-center gap-2 text-lg font-bold">

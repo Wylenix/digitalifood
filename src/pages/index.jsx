@@ -6,6 +6,7 @@ import Cards from "../components/Cards";
 import axios from "axios";
 import { useUser } from "@auth0/nextjs-auth0/client";
 import Logout from "../components/Logout";
+import Charts from "../components/Charts";
 
 import Skeletons from "../components/Skeletons";
 
@@ -18,11 +19,13 @@ export default function Products({ searchParams }) {
   const [filters, setFilters] = useState([]);
   const [currentFilter, setCurrentFilter] = useState(null);
   const { user, error, isLoadingApp } = useUser();
+  const [dashboard, setDashboard] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [caloriesRange, setCaloriesRange] = useState([0, 2065]);
+  const [maxCalories, setMaxCalories] = useState(2065);
 
   if (isLoadingApp) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
-
-  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value.toLowerCase()); // Convert search terms to lowercase for case-insensitive search
@@ -30,15 +33,21 @@ export default function Products({ searchParams }) {
 
   const filteredRecipes = currentFilter
     ? recipes.filter((recipe) => {
-        const searchText = recipe.recipe.label.toLowerCase(); // Convert recipe label to lowercase for case-insensitive search
+        const searchText = recipe.recipe.label.toLowerCase();
         return (
           searchText.includes(searchQuery) &&
-          recipe.recipe.cuisineType.includes(currentFilter)
+          recipe.recipe.cuisineType.includes(currentFilter) &&
+          recipe.recipe.calories >= caloriesRange[0] &&
+          recipe.recipe.calories <= caloriesRange[1]
         );
       })
     : recipes.filter((recipe) => {
         const searchText = recipe.recipe.label.toLowerCase();
-        return searchText.includes(searchQuery);
+        return (
+          searchText.includes(searchQuery) &&
+          recipe.recipe.calories >= caloriesRange[0] &&
+          recipe.recipe.calories <= caloriesRange[1]
+        );
       });
 
   useEffect(() => {
@@ -64,6 +73,12 @@ export default function Products({ searchParams }) {
         const filters = [...new Set(allCategories)];
 
         setFilters(filters);
+        if (recipeData.length > 0) {
+          const maxCal = Math.max(
+            ...recipeData.map((recipe) => recipe.recipe.calories)
+          );
+          setMaxCalories(maxCal);
+        }
       })
       .catch((error) => {
         console.error(error);
@@ -77,10 +92,12 @@ export default function Products({ searchParams }) {
       setCurrentFilter(filter);
     }
   };
+
   if (user) {
     return (
-      <main className="m-auto flex h-full max-w-4xl flex-col px-4">
+      <main className="m-auto flex h-full max-w-8xl flex-col px-4">
         <Header />
+
         <input
           type="text"
           placeholder="Rechercher une recette"
@@ -100,9 +117,13 @@ export default function Products({ searchParams }) {
                 filters={filters}
                 currentFilter={currentFilter}
                 onFilterChange={handleFilterChange}
+                filteredRecipes={filteredRecipes}
+                caloriesRange={caloriesRange}
+                setCaloriesRange={setCaloriesRange}
+                maxCalories={maxCalories}
               />
 
-              <div className="grid grid-cols-1 overflow-auto gap-4 w-full md:grid-cols-2 lg:grid-col-3 h-fit">
+              <div className="grid grid-cols-1 overflow-auto gap-4 w-full md:grid-cols-2  h-fit">
                 {filteredRecipes.map((card, index) => (
                   <Cards
                     card={card}
@@ -110,6 +131,9 @@ export default function Products({ searchParams }) {
                     onClick={() => handleCardClick(card)}
                   />
                 ))}
+              </div>
+              <div className="grid grid-cols-1 overflow-auto gap-4 w-[75%]  h-fit">
+                <Charts filter={filteredRecipes} />
               </div>
             </>
           )}
