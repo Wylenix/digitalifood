@@ -1,4 +1,3 @@
-import ReactSvg from "../utils/ReactSvg";
 import Button from "./Button";
 import { User } from "lucide-react";
 import Link from "next/link";
