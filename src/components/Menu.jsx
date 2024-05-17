@@ -5,7 +5,7 @@ const Menu = ({
   filters,
   currentFilter,
   onFilterChange,
-  filteredRecipes,
+
   caloriesRange,
   setCaloriesRange,
   maxCalories,
